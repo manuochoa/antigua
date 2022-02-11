@@ -1,0 +1,36 @@
+/*-------- Fonts --------*/
+$font-r: "Proxima Nova Rg";
+$font-b: "Proxima Nova Bold";
+$font-fg: "Freigeist";
+
+/*-------- Colors --------*/
+$black: #060814;
+$purple: #b240df;
+$purpleLinear: linear-gradient(263.82deg, #b240df -12.94%, #d18cec 115.37%);
+
+@import "./reset.scss";
+@import "./components/components.scss";
+
+.input {
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  padding-right: 20px;
+  margin-top: 10px;
+
+  background: transparent;
+  border: 1px solid rgba(221, 226, 255, 0.1);
+  border-radius: 12px;
+
+  font-family: $font-r;
+  font-size: 22px;
+  color: #ffffff;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

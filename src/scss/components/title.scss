@@ -1,0 +1,22 @@
+/*-------- Title --------*/
+
+.title {
+    font-family: $font-fg;
+    font-size: 20px;
+    color: #ffffff;
+    letter-spacing: 1.9px;
+}
+
+@media (max-width: 767px) {
+
+    .title {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 479px) {
+
+    .title {
+        font-size: 16px;
+    }
+}

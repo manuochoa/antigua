@@ -1,0 +1,26 @@
+@font-face {
+    font-family: 'Proxima Nova Rg';
+    src: url('subset-ProximaNova-Regular.woff2') format('woff2'),
+        url('subset-ProximaNova-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Proxima Nova Bold';
+    src: url('subset-ProximaNova-Bold.woff2') format('woff2'),
+        url('subset-ProximaNova-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Freigeist';
+    src: url('subset-Freigeist-Bold.woff2') format('woff2'),
+        url('subset-Freigeist-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}

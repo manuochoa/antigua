@@ -1,0 +1,152 @@
+/*-------- Stats --------*/
+
+.stats {
+    height: 100%;
+    
+    &__title {
+        font-size: 20px;
+        font-family: $font-b;
+    }
+
+    &__title--small {
+        font-size: 16px;
+    }
+
+    &__row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__goto {
+        color: #ffffff;
+    }
+
+    &__text {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    &__text--date {
+        display: block;
+        margin-top: 8px;
+    }
+
+    &__section:not(:first-child) {
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid rgba(232, 232, 232, 0.3);
+    }
+
+    &__progress:not(:first-child) {
+        margin-top: 20px;
+    }
+
+    &__progress-bar {
+        height: 8px;
+        margin-top: 12px;
+        background-color: #ffffff;
+    }
+
+    &__progress-track {
+        display: block;
+        height: 100%;
+        background-color: $purple;
+    }
+
+    &__progress-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    &__progress-text {
+        font-size: 16px;
+    }
+
+    &__item {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__item:not(:first-child) {
+        margin-top: 20px;
+    }
+
+    &__text--value {
+        color: #ffffff;
+    }
+}
+
+@media (max-width: 1099px) {
+
+    .stats {
+
+        &__text {
+            font-size: 14px;
+        }
+    }
+}
+
+@media (max-width: 989px)  {
+
+    .stats {
+        width: 100%;
+    }
+}
+
+@media (max-width: 479px) {
+
+    .stats {
+        padding: 20px 15px;
+        
+        &__title {
+            font-size: 16px;
+        }
+
+        &__goto {
+            width: 10px;
+        }
+
+        &__goto-icon {
+            width: 100%;
+        }
+
+        &__text {
+            font-size: 12px;
+        }
+
+        &__text--date {
+            margin-top: 4px;
+        }
+
+        &__section:not(:first-child) {
+            margin-top: 18px;
+            padding-top: 18px;
+        }
+
+        &__title--small {
+            font-size: 12px;
+        }
+
+        &__progress-bar {
+            height: 6px;
+            margin-top: 10px; 
+        }
+
+        &__progress-row {
+            margin-top: 8px;
+        }
+
+        &__progress-text {
+            font-size: 12px;
+        }
+
+        &__progress:not(:first-child) {
+            margin-top: 16px;
+        }
+
+        &__item:not(:first-child) {
+            margin-top: 12px;
+        }
+    }
+}

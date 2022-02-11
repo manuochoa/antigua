@@ -1,0 +1,17 @@
+/*-------- Schedule --------*/
+
+.schedule {
+    padding-top: 30px;
+    
+    &__table {
+        height: calc(100% - 30px);
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 989px) {
+
+    .schedule {
+        padding-top: 20px;
+    }
+}

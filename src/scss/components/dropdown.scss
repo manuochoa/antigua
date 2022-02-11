@@ -1,0 +1,129 @@
+/*-------- Dropdown --------*/
+
+.dropdown {
+    width: 100%;
+
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    z-index: 10;
+
+    &.opened {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    &__row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.dropdown {
+
+    &--header {
+        width: max-content;
+        padding-top: 8px;
+        top: 100%;
+    }
+
+    &--header &__wrapper {
+        padding: 14px 16px 20px 16px;
+        background: linear-gradient(266.42deg, #191B26 0%, #121420 100%), #C4C4C4;
+        box-shadow: 0px 24px 60px -12px rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+    }
+
+    &--header &__account {
+        display: flex;
+        align-items: center;
+        margin-top: 14px;
+    }
+
+    &--header &__title {
+        font-family: $font-fg;
+        font-size: 16px;
+        color: #fff;
+        letter-spacing: 1.9px;
+    }
+
+    &--header &__button {
+        display: flex;
+        align-items: center;
+
+        height: 28px;
+        padding: 0 8px;
+
+        font-size: 12px;
+        color: #fff;
+
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
+
+        transition: color 0.2s ease-out, border-color 0.2s ease-out;
+    }
+
+    &--header &__button:hover {
+        color: rgb(179, 6, 6);
+        border-color: rgb(179, 6, 6);
+    }
+
+    &--header &__account-icon-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 40px;
+        height: 40px;
+
+        background: rgba(221, 226, 255, 0.1);
+        border-radius: 50%;
+    }
+
+    &--header &__account-icon {
+        width: 50%;
+    }
+
+    &--header &__account-address {
+        font-size: 12px;
+        color: #fff;
+    }
+
+    &--header &__account-row {
+        display: flex;
+        align-items: center;
+    }
+
+    &--header &__account-action {
+        width: 16px;
+        height: 16px;
+        margin-left: 6px;
+    }
+
+    &--header &__account-action-icon {
+        width: 100%;
+        height: auto;
+        color: #fff;
+        transition: color 0.2s ease-out;
+    }
+
+    &--header &__account-action-icon:hover {
+        color: $purple;
+    }
+
+    &--header &__account-column {
+        margin-left: 12px;
+    }
+
+    &--header &__account-row--wallet {
+        margin-top: 5px;
+        font-size: 12px;
+        color: rgba(221, 226, 255, 0.5);
+    }
+}

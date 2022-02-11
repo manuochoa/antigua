@@ -1,0 +1,13 @@
+/*-------- Description --------*/
+
+.description {
+    
+    &__scrollwrapper {
+        max-height: calc(100% - 40px);
+        margin-top: 20px;
+    }
+
+    &__text {
+        line-height: 1.6;
+    }
+}

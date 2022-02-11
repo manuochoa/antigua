@@ -1,0 +1,136 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body, #root {
+    height: 100%;
+}
+
+body {
+    min-width: 320px;
+
+    font-family: $font-r;
+    font-size: 14px;
+    color: rgba(221, 226, 255, 0.7);
+
+    background: url(../../images/background.svg);
+    background-color: $black;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 400;
+}
+
+button {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+a {
+    text-decoration: none;
+    outline: 0;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.container {
+    width: 100%;
+    max-width: 1320px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 20px;
+}
+
+.logo {
+    color: #ffffff;
+
+    &__icon {
+        display: block;
+        width: 100%;
+    }
+}
+
+.scrollwrapper {
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+
+        background: rgba(196, 196, 196, 0.1);
+        border-radius: 100px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        width: 6px;
+        background: #DDE2FF;
+        border-radius: 100px;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+        background-color: #c0c8f8;
+    }
+}
+
+.scroll-visible .scrollwrapper {
+    padding-right: 13px;
+}
+
+@media (hover: none) and (pointer: coarse) {
+
+    .scrollwrapper {
+        padding-right: 0 !important;
+
+        &::-webkit-scrollbar {
+            width: 0px;
+        }
+    }
+}
+
+@media (max-width: 989px) {
+
+    .logo {
+        width: 130px;
+    }
+}
+
+@media (max-width: 479px) {
+
+    body {
+        font-size: 12px;
+    }
+
+    .logo {
+        width: 38px;
+    }
+
+    .container {
+        padding: 0 12px;
+    }
+}

@@ -1,0 +1,22 @@
+/*-------- Notification --------*/
+
+.notification {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 8px 18px;
+
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+
+    color: #ffffff;
+    font-size: 22px;
+    line-height: 1;
+    font-weight: 300;
+
+    background-color: #252525;
+    border: #e6e6e6;
+    border-radius: 5px;
+}

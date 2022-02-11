@@ -1,0 +1,48 @@
+/*-------- Button --------*/
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 56px;
+    padding: 0 20px;
+
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(221, 226, 255, 0.1);
+
+    font-family: $font-b;
+    font-size: 16px;
+    color: #fff;
+
+    transition: color 0.2s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.2s cubic-bezier(0.19, 1, 0.22, 1),
+        border-color 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+
+    &:hover,
+    &.active {
+        background-color: transparent;
+        color: #ffffff;
+    }
+}
+
+.button {
+    &--header {
+        height: 48px;
+        padding: 0 37px;
+        font-size: 16px;
+    }
+}
+
+.button {
+
+    &--purple {
+        background-color: $purple;
+        border-color: $purple;
+        color: #ffffff;
+    }
+
+    &--purple:hover {
+        color: $purple;
+    }
+}
