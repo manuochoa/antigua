@@ -4,24 +4,59 @@ import {
   checkForScrollbar,
   getScrollbarWidth,
 } from "../services/scrollbarService";
-import { mint } from "../blockchain/functions";
+import { mint, checkAllowance, approveToken } from "../blockchain/functions";
 import NumberFormat from "react-number-format";
+import all from "gsap/all";
 
-export default function Invest({ item, ...props }) {
+export default function Invest({ userAddress, item, ...props }) {
   const scrollwrapper = useRef(null);
   const [scrollVisible, setScrollVisible] = useState(false);
+  const [isTokenAllow, setIsTokenAllow] = useState(false);
   const [value, setValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   console.log(scrollVisible);
   useEffect(() => {
     setScrollVisible(checkForScrollbar(scrollwrapper.current));
   }, []);
+  useEffect(() => {
+    checkAllow();
+  }, [item, userAddress]);
+
+  const checkAllow = async () => {
+    if (userAddress) {
+      if (
+        item.paymentToken &&
+        item.paymentToken !== "0x0000000000000000000000000000000000000000"
+      ) {
+        let allowance = await checkAllowance(userAddress, item.paymentToken);
+
+        setIsTokenAllow(allowance);
+      } else if (
+        item.paymentToken === "0x0000000000000000000000000000000000000000"
+      ) {
+        setIsTokenAllow(true);
+      }
+    }
+  };
+
+  const approve = async () => {
+    setIsLoading(true);
+    let receipt = await approveToken(item.paymentToken);
+    if (receipt) {
+      console.log(receipt);
+      checkAllow();
+    }
+    setIsLoading(false);
+  };
 
   const handleInvest = async () => {
-    let receipt = await mint(value, item.id, item.priceWei);
+    setIsLoading(true);
+    let receipt = await mint(value, item.id, item.priceWei, item.paymentToken);
     if (receipt) {
       console.log(receipt);
     }
+    setIsLoading(false);
   };
 
   function handleInputChange({ value }) {
@@ -66,10 +101,11 @@ export default function Invest({ item, ...props }) {
           allowNegative={false}
         />
         <button
+          disabled={isLoading}
           className="invest__button button button--purple"
-          onClick={handleInvest}
+          onClick={isTokenAllow ? handleInvest : approve}
         >
-          Buy & Invest
+          {isTokenAllow ? "Buy & Invest" : `Approve ${item.symbol}`}
         </button>
       </div>
     </div>

@@ -170,17 +170,7 @@ export const abi = [
       },
       {
         internalType: "string",
-        name: "_logo",
-        type: "string",
-      },
-      {
-        internalType: "string",
         name: "_uri",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_dataURI",
         type: "string",
       },
       {
@@ -206,6 +196,11 @@ export const abi = [
       {
         internalType: "address",
         name: "_projectWallet",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_paymentToken",
         type: "address",
       },
     ],
@@ -355,17 +350,12 @@ export const abi = [
       },
       {
         internalType: "string",
-        name: "logo",
-        type: "string",
-      },
-      {
-        internalType: "string",
         name: "uri",
         type: "string",
       },
       {
         internalType: "string",
-        name: "dataURI",
+        name: "paymentSymbol",
         type: "string",
       },
       {
@@ -401,6 +391,11 @@ export const abi = [
       {
         internalType: "address",
         name: "projectWallet",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "paymentToken",
         type: "address",
       },
     ],
