@@ -198,11 +198,6 @@ export const abi = [
         name: "_projectWallet",
         type: "address",
       },
-      {
-        internalType: "address",
-        name: "_paymentToken",
-        type: "address",
-      },
     ],
     name: "createProject",
     outputs: [],
@@ -391,11 +386,6 @@ export const abi = [
       {
         internalType: "address",
         name: "projectWallet",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "paymentToken",
         type: "address",
       },
     ],

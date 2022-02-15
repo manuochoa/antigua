@@ -9,7 +9,9 @@ import Invest from "./components/Invest";
 import Description from "./components/Description";
 import Schedule from "./components/Schedule";
 
-import { getProjects } from "./blockchain/functions";
+import { getProjects, createProject } from "./blockchain/functions";
+
+import { Switch, Route, Redirect } from "react-router-dom";
 
 const selectItemsArray = [
   {
@@ -77,6 +79,17 @@ export default function App() {
   const selectedItem = selectItems.find((item) => item.selected === true);
   const [userAddress, setUserAddress] = useState("");
   const [walletType, setWalletType] = useState("");
+  const [newProject, setNewProject] = useState({
+    name: "",
+    uri: "",
+    price: "",
+    maxSupply: "",
+    startTime: "",
+    endTime: "",
+    projectWallet: "",
+    description: "",
+    schedule: [],
+  });
 
   const connectMetamask = async () => {
     try {
@@ -122,6 +135,55 @@ export default function App() {
     }
   };
 
+  const handleCreate = async () => {
+    let result = await createProject(newProject);
+    if (result) {
+      console.log(result);
+    }
+  };
+
+  const addSchedule = () => {
+    if (!newProject.schedule) {
+      setNewProject({
+        ...newProject,
+        schedule: [
+          {
+            "% of locked supply released": "",
+            "Est. release date": "",
+            "Tokens released": "",
+            "Vesting period": "",
+            id: newProject.schedule.length,
+          },
+        ],
+      });
+    } else {
+      let newSchedule = newProject.schedule;
+      newSchedule.push({
+        "% of locked supply released": "",
+        "Est. release date": "",
+        "Tokens released": "",
+        "Vesting period": "",
+        id: newProject.schedule.length,
+      });
+      setNewProject({
+        ...newProject,
+        schedule: newSchedule,
+      });
+    }
+    console.log(newProject.schedule);
+  };
+  const removeSchedule = () => {
+    if (newProject.schedule) {
+      let newSchedule = newProject.schedule;
+      newSchedule.pop();
+      setNewProject({
+        ...newProject,
+        schedule: newSchedule,
+      });
+    }
+    console.log(newProject.schedule);
+  };
+
   useEffect(() => {
     let user = window.localStorage.getItem("userAddress");
 
@@ -139,16 +201,194 @@ export default function App() {
         setPopupVisible={setPopupVisible}
       />
       <main className="main container">
-        <Select
-          className="select--main main__background main__background--invest main__column main__column--1 main__column--select"
-          list={selectItems}
-          setList={setSelectItems}
-        />
-        <Description description={selectedItem.description} />
-        <Schedule schedule={selectedItem.schedule} />
-        <div className="main__column main__column--2">
-          <Invest item={selectedItem} userAddress={userAddress} />
-        </div>
+        <Switch>
+          <Route path="/" exact>
+            <Select
+              className="select--main main__background main__background--invest main__column main__column--1 main__column--select"
+              list={selectItems}
+              setList={setSelectItems}
+            />
+            <Description description={selectedItem?.description} />
+            <Schedule schedule={selectedItem?.schedule} />
+            <div className="main__column main__column--2">
+              <Invest item={selectedItem} userAddress={userAddress} />
+            </div>
+          </Route>
+        </Switch>
+        <Switch>
+          <Route path="/create" exact>
+            <div className="main__column main__column--2">
+              <h2>Create</h2>
+              <h4>Name:</h4>
+              <input
+                value={newProject.name}
+                onChange={(e) =>
+                  setNewProject({
+                    ...newProject,
+                    name: e.target.value,
+                  })
+                }
+                type="text"
+              />
+              <h4>Price:</h4>
+              <input
+                value={newProject.price}
+                onChange={(e) =>
+                  setNewProject({
+                    ...newProject,
+                    price: e.target.value,
+                  })
+                }
+                type="number"
+              />
+              <h4>Supply:</h4>
+              <input
+                value={newProject.maxSupply}
+                onChange={(e) =>
+                  setNewProject({
+                    ...newProject,
+                    maxSupply: e.target.value,
+                  })
+                }
+                type="number"
+              />
+              <h4>Start:</h4>
+              <input
+                value={newProject.startTime}
+                onChange={(e) =>
+                  setNewProject({
+                    ...newProject,
+                    startTime: e.target.value,
+                  })
+                }
+                type="number"
+              />
+              <h4>End:</h4>
+              <input
+                value={newProject.endTime}
+                onChange={(e) =>
+                  setNewProject({
+                    ...newProject,
+                    endTime: e.target.value,
+                  })
+                }
+                type="number"
+              />
+              <h4>Project Wallet:</h4>
+              <input
+                value={newProject.projectWallet}
+                onPaste={(e) =>
+                  setNewProject({
+                    ...newProject,
+                    projectWallet: e.target.value,
+                  })
+                }
+                onChange={(e) =>
+                  setNewProject({
+                    ...newProject,
+                    projectWallet: e.target.value,
+                  })
+                }
+                type="text"
+              />
+              <h4>Description:</h4>
+              <textarea
+                value={newProject.description}
+                onChange={(e) =>
+                  setNewProject({
+                    ...newProject,
+                    description: e.target.value,
+                  })
+                }
+                name="description"
+                id=""
+                cols="30"
+                rows="10"
+              ></textarea>
+              <br />
+
+              {newProject.schedule &&
+                newProject.schedule.map((el, index) => {
+                  return (
+                    <div key={index}>
+                      <h3>Release details</h3>
+                      <input
+                        type="text"
+                        placeholder="% of locked supply released"
+                        onChange={(e) => {
+                          let newSchedule = newProject.schedule;
+                          newSchedule[index]["% of locked supply released"] =
+                            e.target.value;
+                          setNewProject({
+                            ...newProject,
+                            schedule: newSchedule,
+                          });
+                        }}
+                      />
+                      <input
+                        type="text"
+                        placeholder="Est. release date"
+                        onChange={(e) => {
+                          let newSchedule = newProject.schedule;
+                          newSchedule[index]["Est. release date"] =
+                            e.target.value;
+                          setNewProject({
+                            ...newProject,
+                            schedule: newSchedule,
+                          });
+                        }}
+                      />
+                      <input
+                        type="text"
+                        placeholder="Tokens released"
+                        onChange={(e) => {
+                          let newSchedule = newProject.schedule;
+                          newSchedule[index]["Tokens released"] =
+                            e.target.value;
+                          setNewProject({
+                            ...newProject,
+                            schedule: newSchedule,
+                          });
+                        }}
+                      />
+                      <input
+                        type="text"
+                        placeholder="Vesting period"
+                        onChange={(e) => {
+                          let newSchedule = newProject.schedule;
+                          newSchedule[index]["Vesting period"] = e.target.value;
+                          setNewProject({
+                            ...newProject,
+                            schedule: newSchedule,
+                          });
+                        }}
+                      />
+                    </div>
+                  );
+                })}
+              <button
+                className="invest__button button button--purple"
+                onClick={addSchedule}
+              >
+                add release
+              </button>
+              <button
+                className="invest__button button button--purple"
+                onClick={removeSchedule}
+              >
+                remove release
+              </button>
+              <br />
+              <button
+                // disabled={isLoading}
+                className="invest__button button button--purple"
+                onClick={handleCreate}
+              >
+                Create
+              </button>
+            </div>
+          </Route>
+        </Switch>
       </main>
       <ConnectPopup
         popupVisible={popupVisible}

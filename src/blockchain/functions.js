@@ -1,6 +1,11 @@
 import { abi } from "./abi";
 import { ethers } from "ethers";
 import axios from "axios";
+import Moralis from "moralis";
+
+const serverUrl = "https://976agwdn6f4b.moralishost.com:2053/server";
+const appId = "kR1EIjrVMujm4cJuQEGZQuAZR65tZ7WSLFXkJvLK";
+Moralis.start({ serverUrl, appId });
 
 // projectById
 // mint
@@ -14,7 +19,8 @@ let provider = new ethers.providers.JsonRpcProvider(
   "https://speedy-nodes-nyc.moralis.io/1d19a6082204e3ecd8dcf0b9/bsc/testnet"
 );
 
-let contractAddress = "0x47322a59b9E454aCdA64F40789d970bE0A21d459";
+let contractAddress = "0xC8F9c63a0aC4F8765152500F6f5dAb9DbC842625";
+let busdAddress = "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7";
 
 let contractInstance = new ethers.Contract(contractAddress, abi, provider);
 
@@ -82,22 +88,14 @@ export const getProjects = async () => {
   }
 };
 
-export const mint = async (amount, projectId, price, paymentToken) => {
+export const mint = async (amount, projectId, price) => {
   try {
     let newProvider = new ethers.providers.Web3Provider(window.ethereum);
     let signer = newProvider.getSigner(0);
 
     let newInstance = new ethers.Contract(contractAddress, abi, signer);
 
-    let receipt;
-    console.log(price, price * amount);
-    if (paymentToken === "0x0000000000000000000000000000000000000000") {
-      let value = (price * amount).toString();
-
-      receipt = await newInstance.mint(projectId, amount, { value });
-    } else {
-      receipt = await newInstance.mint(projectId, amount);
-    }
+    let receipt = await newInstance.mint(projectId, amount);
 
     let result = await receipt.wait();
 
@@ -107,9 +105,9 @@ export const mint = async (amount, projectId, price, paymentToken) => {
   }
 };
 
-export const checkAllowance = async (userAddress, tokenAddress) => {
+export const checkAllowance = async (userAddress) => {
   try {
-    let tokenInstance = new ethers.Contract(tokenAddress, busdAbi, provider);
+    let tokenInstance = new ethers.Contract(busdAddress, busdAbi, provider);
 
     let allowance = await tokenInstance.allowance(userAddress, contractAddress);
 
@@ -119,12 +117,12 @@ export const checkAllowance = async (userAddress, tokenAddress) => {
   }
 };
 
-export const approveToken = async (tokenAddress) => {
+export const approveToken = async () => {
   try {
     let newProvider = new ethers.providers.Web3Provider(window.ethereum);
     let signer = newProvider.getSigner(0);
 
-    let tokenInstance = new ethers.Contract(tokenAddress, busdAbi, signer);
+    let tokenInstance = new ethers.Contract(busdAddress, busdAbi, signer);
     const maxInt =
       "115792089237316195423570985008687907853269984665640564039457584007913129639935";
 
@@ -139,3 +137,55 @@ export const approveToken = async (tokenAddress) => {
     }
   }
 };
+
+export const createProject = async (data) => {
+  try {
+    let {
+      name,
+      price,
+      maxSupply,
+      startTime,
+      endTime,
+      projectWallet,
+      description,
+      schedule,
+    } = data;
+    let user = Moralis.User.current();
+    if (!user) {
+      user = await Moralis.authenticate({
+        signingMessage: "Antigua Ventures Project Creator",
+      });
+    }
+    const metadata = new Moralis.File("metadata.json", {
+      base64: btoa(
+        JSON.stringify({
+          description,
+          schedule,
+        })
+      ),
+    });
+    await metadata.saveIPFS();
+
+    let _price = ethers.utils.parseUnits(price.toString(), "ether");
+
+    let newProvider = new ethers.providers.Web3Provider(window.ethereum);
+    let signer = newProvider.getSigner(0);
+    let newInstance = new ethers.Contract(contractAddress, abi, signer);
+
+    let receipt = await newInstance.createProject(
+      name,
+      metadata._ipfs,
+      _price,
+      maxSupply,
+      startTime,
+      endTime,
+      projectWallet
+    );
+    let result = await receipt.wait();
+    return result;
+  } catch (error) {
+    console.log(error, "createProject");
+  }
+};
+
+// function createProject (string memory _name, string memory _uri, uint256 _price, uint256 _maxSupply, uint256 _startTime, uint256 _endTime, address _projectWallet, address _paymentToken)

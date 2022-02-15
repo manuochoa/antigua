@@ -25,24 +25,15 @@ export default function Invest({ userAddress, item, ...props }) {
 
   const checkAllow = async () => {
     if (userAddress) {
-      if (
-        item.paymentToken &&
-        item.paymentToken !== "0x0000000000000000000000000000000000000000"
-      ) {
-        let allowance = await checkAllowance(userAddress, item.paymentToken);
+      let allowance = await checkAllowance(userAddress);
 
-        setIsTokenAllow(allowance);
-      } else if (
-        item.paymentToken === "0x0000000000000000000000000000000000000000"
-      ) {
-        setIsTokenAllow(true);
-      }
+      setIsTokenAllow(allowance);
     }
   };
 
   const approve = async () => {
     setIsLoading(true);
-    let receipt = await approveToken(item.paymentToken);
+    let receipt = await approveToken();
     if (receipt) {
       console.log(receipt);
       checkAllow();
@@ -52,7 +43,7 @@ export default function Invest({ userAddress, item, ...props }) {
 
   const handleInvest = async () => {
     setIsLoading(true);
-    let receipt = await mint(value, item.id, item.priceWei, item.paymentToken);
+    let receipt = await mint(value, item.id, item.priceWei);
     if (receipt) {
       console.log(receipt);
     }
