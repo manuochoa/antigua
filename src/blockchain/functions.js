@@ -19,7 +19,7 @@ let provider = new ethers.providers.JsonRpcProvider(
   "https://speedy-nodes-nyc.moralis.io/1d19a6082204e3ecd8dcf0b9/bsc/testnet"
 );
 
-let contractAddress = "0xC8F9c63a0aC4F8765152500F6f5dAb9DbC842625";
+let contractAddress = "0x8f7b6A8CF106ff613358384A8CF961Fced6ACFB4";
 let busdAddress = "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7";
 
 let contractInstance = new ethers.Contract(contractAddress, abi, provider);
@@ -149,6 +149,8 @@ export const createProject = async (data) => {
       projectWallet,
       description,
       schedule,
+      URI,
+      Hash,
     } = data;
     let user = Moralis.User.current();
     if (!user) {
@@ -161,6 +163,8 @@ export const createProject = async (data) => {
         JSON.stringify({
           description,
           schedule,
+          URI,
+          Hash,
         })
       ),
     });
@@ -187,5 +191,23 @@ export const createProject = async (data) => {
     console.log(error, "createProject");
   }
 };
+
+export async function uploadFile(data) {
+  try {
+    let user = Moralis.User.current();
+    if (!user) {
+      user = await Moralis.authenticate({
+        signingMessage: "Antigua Ventures Project Creator",
+      });
+    }
+    const fileToUpload = new Moralis.File(data.name, data);
+    fileToUpload.type = data.type;
+    await fileToUpload.saveIPFS();
+
+    return fileToUpload;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 // function createProject (string memory _name, string memory _uri, uint256 _price, uint256 _maxSupply, uint256 _startTime, uint256 _endTime, address _projectWallet, address _paymentToken)

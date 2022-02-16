@@ -9,7 +9,7 @@ import Invest from "./components/Invest";
 import Description from "./components/Description";
 import Schedule from "./components/Schedule";
 
-import { getProjects, createProject } from "./blockchain/functions";
+import { getProjects, createProject, uploadFile } from "./blockchain/functions";
 
 import { Switch, Route, Redirect } from "react-router-dom";
 
@@ -79,6 +79,7 @@ export default function App() {
   const selectedItem = selectItems.find((item) => item.selected === true);
   const [userAddress, setUserAddress] = useState("");
   const [walletType, setWalletType] = useState("");
+  const [fileUploaded, setFileUploaded] = useState("");
   const [newProject, setNewProject] = useState({
     name: "",
     uri: "",
@@ -182,6 +183,22 @@ export default function App() {
       });
     }
     console.log(newProject.schedule);
+  };
+
+  const handleUpload = async (e) => {
+    try {
+      let result = await uploadFile(e.target.files[0]);
+      setFileUploaded(result._ipfs);
+      console.log(result);
+
+      setNewProject({
+        ...newProject,
+        URI: result._ipfs,
+        Hash: result._hash,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -305,6 +322,24 @@ export default function App() {
                 cols="30"
                 rows="10"
               ></textarea>
+              <br />
+              <button className="invest__button button button--purple">
+                <label>
+                  Upload Image
+                  <input
+                    onChange={(e) => handleUpload(e)}
+                    type="file"
+                    style={{ display: "none" }}
+                  />
+                </label>
+              </button>
+              {fileUploaded !== "" && (
+                <img
+                  style={{ maxWidth: "200px", maxHeight: "200px" }}
+                  src={fileUploaded}
+                  alt={fileUploaded}
+                />
+              )}
               <br />
 
               {newProject.schedule &&

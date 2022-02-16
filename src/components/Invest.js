@@ -65,7 +65,9 @@ export default function Invest({ userAddress, item, ...props }) {
       <div className="scrollwrapper invest__scrollwrapper" ref={scrollwrapper}>
         <div
           className="invest__image-wrapper"
-          style={{ backgroundImage: `url(${investImage})` }}
+          style={{
+            backgroundImage: `url(${item.URI ? item.URI : investImage})`,
+          }}
         ></div>
         <h1 className="title invest__title">{item.title}</h1>
         <ul className="invest__list">
