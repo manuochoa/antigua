@@ -16,10 +16,10 @@ let busdAbi = [
 ];
 
 let provider = new ethers.providers.JsonRpcProvider(
-  "https://speedy-nodes-nyc.moralis.io/1d19a6082204e3ecd8dcf0b9/bsc/testnet"
+  "https://data-seed-prebsc-1-s1.binance.org:8545/"
 );
 
-let contractAddress = "0x8f7b6A8CF106ff613358384A8CF961Fced6ACFB4";
+let contractAddress = "0x84604E75DeB5B4F9eF49D5b99407EAAD04459139";
 let busdAddress = "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7";
 
 let contractInstance = new ethers.Contract(contractAddress, abi, provider);
@@ -32,6 +32,7 @@ const getDate = (date) => {
 export const getProjects = async () => {
   try {
     let activeProjects = await contractInstance.getActiveProjects();
+    console.log(activeProjects, "active");
     let ids = activeProjects[1];
 
     let projectsDetails = await Promise.all(

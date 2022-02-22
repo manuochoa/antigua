@@ -268,6 +268,25 @@ export const abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "isManager",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "projectId",
         type: "uint256",
@@ -496,6 +515,19 @@ export const abi = [
       },
     ],
     name: "setApprovalForAll",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address[]",
+        name: "_managers",
+        type: "address[]",
+      },
+    ],
+    name: "setManagers",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
