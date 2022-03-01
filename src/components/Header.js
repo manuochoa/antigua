@@ -3,7 +3,7 @@ import HeaderDropdown from "./HeaderDropdown";
 import metamaskIcon from "../images/icons/metamask.svg";
 import Arrow from "../Icons/Arrow";
 
-export default function Header({ popupVisible, setPopupVisible, userAddress }) {
+export default function Header({ disconnectWallet,popupVisible, setPopupVisible, userAddress }) {
   return (
     <header className="header">
       <div className="header__wrapper container">
@@ -15,7 +15,7 @@ export default function Header({ popupVisible, setPopupVisible, userAddress }) {
             "button button--header header__button" +
             (popupVisible ? " active" : "")
           }
-          onClick={() => setPopupVisible(true)}
+          onClick={userAddress ? disconnectWallet  : () => setPopupVisible(true)}
         >
           {" "}
           {userAddress

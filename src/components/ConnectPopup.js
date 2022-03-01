@@ -9,6 +9,7 @@ export default function ConnectPopup({
   popupVisible,
   setPopupVisible,
   connectMetamask,
+  connectWalletConnect,
   userAddress,
 }) {
   const [checkboxes, setCheckboxes] = useState({
@@ -54,7 +55,7 @@ export default function ConnectPopup({
                 "popup__checkbox" + (checkboxes.walletConnect ? " active" : "")
               }
               onClick={() =>
-                setCheckboxes({ metamask: false, walletConnect: true })
+                connectWalletConnect()
               }
             >
               <div className="popup__checkbox-icon-wrapper">

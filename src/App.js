@@ -12,6 +12,10 @@ import Schedule from "./components/Schedule";
 import { getProjects, createProject, uploadFile } from "./blockchain/functions";
 
 import { Switch, Route, Redirect } from "react-router-dom";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import Web3 from "web3";
+
+import DateTimePicker from "react-datetime-picker";
 
 const selectItemsArray = [
   {
@@ -80,6 +84,8 @@ export default function App() {
   const [userAddress, setUserAddress] = useState("");
   const [walletType, setWalletType] = useState("");
   const [fileUploaded, setFileUploaded] = useState("");
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
   const [newProject, setNewProject] = useState({
     name: "",
     uri: "",
@@ -129,6 +135,48 @@ export default function App() {
     }
   };
 
+  const connectWalletConnect = async () => {
+    try {
+      console.log("hola");
+      const provider = new WalletConnectProvider({
+        rpc: {
+          97: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+        },
+        chainId: 97,
+        infuraId: null,
+      });
+
+      await provider.enable();
+      const web3 = new Web3(provider);
+
+      // const accounts = await ethers.listAccounts();
+      const accounts = await web3.eth.getAccounts();
+
+      setUserAddress(accounts[0]);
+      setWalletType("WALLET_CONNECT");
+      setPopupVisible(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const disconnectWallet = async () => {
+    if (walletType === "WALLET_CONNECT") {
+      const provider = new WalletConnectProvider({
+        rpc: {
+          1: "https://rpc.ankr.com/eth",
+        },
+        chainId: 1,
+        infuraId: null,
+      });
+      await provider.disconnect();
+    } else {
+      window.localStorage.removeItem("userAddress");
+    }
+
+    setUserAddress("");
+  };
+
   const getActiveProjects = async () => {
     let projects = await getProjects();
     if (projects) {
@@ -137,6 +185,7 @@ export default function App() {
   };
 
   const handleCreate = async () => {
+    
     let result = await createProject(newProject);
     if (result) {
       console.log(result);
@@ -215,6 +264,7 @@ export default function App() {
       <Header
         popupVisible={popupVisible}
         userAddress={userAddress}
+        disconnectWallet={disconnectWallet}
         setPopupVisible={setPopupVisible}
       />
       <main className="main container">
@@ -228,7 +278,11 @@ export default function App() {
             <Description description={selectedItem?.description} />
             <Schedule schedule={selectedItem?.schedule} />
             <div className="main__column main__column--2">
-              <Invest item={selectedItem} userAddress={userAddress} />
+              <Invest
+                walletType={walletType}
+                item={selectedItem}
+                userAddress={userAddress}
+              />
             </div>
           </Route>
         </Switch>
@@ -270,7 +324,18 @@ export default function App() {
                 type="number"
               />
               <h4>Start:</h4>
-              <input
+              <DateTimePicker
+                className={"calendar"}
+                onChange={(e) => {
+                  setStartTime(e);
+                  setNewProject({
+                    ...newProject,
+                    startTime: e.getTime() / 1000,
+                  });
+                }}
+                value={startTime}
+              />
+              {/* <input
                 value={newProject.startTime}
                 onChange={(e) =>
                   setNewProject({
@@ -279,9 +344,20 @@ export default function App() {
                   })
                 }
                 type="number"
-              />
+              /> */}
               <h4>End:</h4>
-              <input
+              <DateTimePicker
+                className={"calendar"}
+                onChange={(e) => {
+                  setEndTime(e);
+                  setNewProject({
+                    ...newProject,
+                    endTime: e.getTime() / 1000,
+                  });
+                }}
+                value={endTime}
+              />
+              {/* <input
                 value={newProject.endTime}
                 onChange={(e) =>
                   setNewProject({
@@ -290,7 +366,7 @@ export default function App() {
                   })
                 }
                 type="number"
-              />
+              /> */}
               <h4>Project Wallet:</h4>
               <input
                 value={newProject.projectWallet}
@@ -429,6 +505,7 @@ export default function App() {
         popupVisible={popupVisible}
         setPopupVisible={setPopupVisible}
         connectMetamask={connectMetamask}
+        connectWalletConnect={connectWalletConnect}
         userAddress={userAddress}
       />
     </NotificationProvider>

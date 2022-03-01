@@ -2,6 +2,8 @@ import { abi } from "./abi";
 import { ethers } from "ethers";
 import axios from "axios";
 import Moralis from "moralis";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import Web3 from "web3";
 
 const serverUrl = "https://976agwdn6f4b.moralishost.com:2053/server";
 const appId = "kR1EIjrVMujm4cJuQEGZQuAZR65tZ7WSLFXkJvLK";
@@ -89,20 +91,44 @@ export const getProjects = async () => {
   }
 };
 
-export const mint = async (amount, projectId, price) => {
+export const mint = async (amount, projectId, price,walletType) => {
   try {
-    let newProvider = new ethers.providers.Web3Provider(window.ethereum);
-    let signer = newProvider.getSigner(0);
+    let result;
+    if (walletType === "WALLET_CONNECT") {
+      provider = new WalletConnectProvider({
+        rpc: {
+          97: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+        },
+        chainId: 97,
+        infuraId: null,
+      });
 
-    let newInstance = new ethers.Contract(contractAddress, abi, signer);
+      await provider.enable();
+      let web3 = new Web3(provider);
+      let userAddress = await web3.eth.getAccounts();
 
-    let receipt = await newInstance.mint(projectId, amount);
+      contractInstance = new web3.eth.Contract(busdAbi, busdAddress);
 
-    let result = await receipt.wait();
+      result = await contractInstance.methods
+        .mint(projectId, amount)
+        .send({ from: userAddress[0] });
+    } else {
+      let newProvider = new ethers.providers.Web3Provider(window.ethereum);
+      let signer = newProvider.getSigner(0);
+
+      let newInstance = new ethers.Contract(contractAddress, abi, signer);
+
+      let receipt = await newInstance.mint(projectId, amount);
+
+      result = await receipt.wait();
+    }
 
     return result;
   } catch (error) {
     console.log(error, "Mint");
+    if (error.data) {
+      window.alert(error.data.message);
+    }
   }
 };
 
@@ -118,17 +144,39 @@ export const checkAllowance = async (userAddress) => {
   }
 };
 
-export const approveToken = async () => {
+export const approveToken = async (walletType) => {
   try {
-    let newProvider = new ethers.providers.Web3Provider(window.ethereum);
-    let signer = newProvider.getSigner(0);
-
-    let tokenInstance = new ethers.Contract(busdAddress, busdAbi, signer);
+    let receipt;
     const maxInt =
       "115792089237316195423570985008687907853269984665640564039457584007913129639935";
 
-    let tx = await tokenInstance.approve(contractAddress, maxInt);
-    let receipt = await tx.wait();
+    if (walletType === "WALLET_CONNECT") {
+      provider = new WalletConnectProvider({
+        rpc: {
+          97: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+        },
+        chainId: 97,
+        infuraId: null,
+      });
+
+      await provider.enable();
+      let web3 = new Web3(provider);
+      let userAddress = await web3.eth.getAccounts();
+
+      contractInstance = new web3.eth.Contract(busdAbi, busdAddress);
+
+      receipt = await contractInstance.methods
+        .approve(contractAddress, maxInt)
+        .send({ from: userAddress[0] });
+    } else {
+      let newProvider = new ethers.providers.Web3Provider(window.ethereum);
+      let signer = newProvider.getSigner(0);
+
+      let tokenInstance = new ethers.Contract(busdAddress, busdAbi, signer);
+
+      let tx = await tokenInstance.approve(contractAddress, maxInt);
+      receipt = await tx.wait();
+    }
 
     return receipt;
   } catch (error) {
@@ -153,6 +201,7 @@ export const createProject = async (data) => {
       URI,
       Hash,
     } = data;
+   
     let user = Moralis.User.current();
     if (!user) {
       user = await Moralis.authenticate({

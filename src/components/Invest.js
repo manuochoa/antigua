@@ -8,7 +8,7 @@ import { mint, checkAllowance, approveToken } from "../blockchain/functions";
 import NumberFormat from "react-number-format";
 import all from "gsap/all";
 
-export default function Invest({ userAddress, item, ...props }) {
+export default function Invest({ userAddress, walletType,item, ...props }) {
   const scrollwrapper = useRef(null);
   const [scrollVisible, setScrollVisible] = useState(false);
   const [isTokenAllow, setIsTokenAllow] = useState(false);
@@ -33,7 +33,7 @@ export default function Invest({ userAddress, item, ...props }) {
 
   const approve = async () => {
     setIsLoading(true);
-    let receipt = await approveToken();
+    let receipt = await approveToken(walletType);
     if (receipt) {
       console.log(receipt);
       checkAllow();
@@ -43,7 +43,7 @@ export default function Invest({ userAddress, item, ...props }) {
 
   const handleInvest = async () => {
     setIsLoading(true);
-    let receipt = await mint(value, item.id, item.priceWei);
+    let receipt = await mint(value, item.id, item.priceWei,walletType);
     if (receipt) {
       console.log(receipt);
     }
