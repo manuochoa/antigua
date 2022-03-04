@@ -110,16 +110,16 @@ export default function App() {
 
       window.localStorage.setItem("userAddress", accounts[0]);
 
-      //   const chainId = await window.ethereum.request({
-      //     method: "eth_chainId",
-      //   });
+      const chainId = await window.ethereum.request({
+        method: "eth_chainId",
+      });
 
-      //   if (chainId !== "0x38") {
-      //     await window.ethereum.request({
-      //       method: "wallet_switchEthereumChain",
-      //       params: [{ chainId: "0x38" }],
-      //     });
-      //   }
+      if (chainId !== "0x38") {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: "0x38" }],
+        });
+      }
 
       window.ethereum.on("accountsChanged", function (accounts) {
         setUserAddress(accounts[0]);
