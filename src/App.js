@@ -140,9 +140,9 @@ export default function App() {
       console.log("hola");
       const provider = new WalletConnectProvider({
         rpc: {
-          97: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+          56: "https://bsc-dataseed1.ninicoin.io/",
         },
-        chainId: 97,
+        chainId: 56,
         infuraId: null,
       });
 
@@ -164,9 +164,9 @@ export default function App() {
     if (walletType === "WALLET_CONNECT") {
       const provider = new WalletConnectProvider({
         rpc: {
-          1: "https://rpc.ankr.com/eth",
+          56: "https://bsc-dataseed1.ninicoin.io/",
         },
-        chainId: 1,
+        chainId: 56,
         infuraId: null,
       });
       await provider.disconnect();
@@ -185,7 +185,6 @@ export default function App() {
   };
 
   const handleCreate = async () => {
-    
     let result = await createProject(newProject);
     if (result) {
       console.log(result);

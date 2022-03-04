@@ -18,11 +18,11 @@ let busdAbi = [
 ];
 
 let provider = new ethers.providers.JsonRpcProvider(
-  "https://data-seed-prebsc-1-s1.binance.org:8545/"
+  "https://bsc-dataseed1.ninicoin.io/"
 );
 
-let contractAddress = "0x84604E75DeB5B4F9eF49D5b99407EAAD04459139";
-let busdAddress = "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7";
+let contractAddress = "0x99f2BAD41f8698D33a5e7d28059B9Da6e7049fBC";
+let busdAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
 
 let contractInstance = new ethers.Contract(contractAddress, abi, provider);
 
@@ -91,7 +91,7 @@ export const getProjects = async () => {
   }
 };
 
-export const mint = async (amount, projectId, price,walletType) => {
+export const mint = async (amount, projectId, price, walletType) => {
   try {
     let result;
     if (walletType === "WALLET_CONNECT") {
@@ -153,9 +153,9 @@ export const approveToken = async (walletType) => {
     if (walletType === "WALLET_CONNECT") {
       provider = new WalletConnectProvider({
         rpc: {
-          97: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+          56: "https://bsc-dataseed1.ninicoin.io/",
         },
-        chainId: 97,
+        chainId: 56,
         infuraId: null,
       });
 
@@ -201,7 +201,7 @@ export const createProject = async (data) => {
       URI,
       Hash,
     } = data;
-   
+
     let user = Moralis.User.current();
     if (!user) {
       user = await Moralis.authenticate({
@@ -212,6 +212,8 @@ export const createProject = async (data) => {
       base64: btoa(
         JSON.stringify({
           description,
+          name,
+          image: `https://ipfs.io/ipfs/${Hash}`,
           schedule,
           URI,
           Hash,
