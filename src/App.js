@@ -89,13 +89,14 @@ export default function App() {
   const [newProject, setNewProject] = useState({
     name: "",
     uri: "",
+    URI: "",
     price: "",
     maxSupply: "",
     startTime: "",
     endTime: "",
     projectWallet: "",
     description: "",
-    schedule: [],
+    schedule: [{}],
   });
 
   const connectMetamask = async () => {
@@ -179,7 +180,7 @@ export default function App() {
 
   const getActiveProjects = async () => {
     let projects = await getProjects();
-    if (projects) {
+    if (projects.length > 0) {
       setSelectItems(projects);
     }
   };
