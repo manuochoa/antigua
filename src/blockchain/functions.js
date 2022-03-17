@@ -5,6 +5,9 @@ import Moralis from "moralis";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Web3 from "web3";
 
+const serverUrl = "https://il4hsrq5ab2i.moralisweb3.com:2053/server";
+const appId = "3RsVK4dZSBxm5p5EnkN9iWooV64bQtoIPbDInCeZ";
+Moralis.start({ serverUrl, appId });
 // projectById
 // mint
 let busdAbi = [
@@ -197,9 +200,6 @@ export const createProject = async (data) => {
       URI,
       Hash,
     } = data;
-    const serverUrl = "https://il4hsrq5ab2i.moralisweb3.com:2053/server";
-    const appId = "3RsVK4dZSBxm5p5EnkN9iWooV64bQtoIPbDInCeZ";
-    Moralis.start({ serverUrl, appId });
 
     let user = Moralis.User.current();
     if (!user) {
@@ -240,6 +240,9 @@ export const createProject = async (data) => {
     return result;
   } catch (error) {
     console.log(error, "createProject");
+    if (error.data) {
+      window.alert(error.data.message);
+    }
   }
 };
 
